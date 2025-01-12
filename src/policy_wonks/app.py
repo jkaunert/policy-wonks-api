@@ -41,20 +41,16 @@ def run(policy_topic1: str, policy_topic2: str, economic_variable1: str, economi
 
      # Extract outputs from economist
     economist_task = policy_wonks.economist_task()
-    economist = economist_task.agent.role # get the economist agent name
     economist_output = economist_task.output # get the economist output
 
     # Extract outputs from financial_analyst
     financial_analyst_task = policy_wonks.financial_analyst_task()
-    financial_analyst = financial_analyst_task.agent.role # get the financial analyst agent name
     financial_analyst_output = financial_analyst_task.output # get the financial analyst output
 
     # Return the outputs
     policy_wonks_output = {
-        "economist": getattr(economist, 'raw', str(economist)),
         "economist_output": getattr(economist_output, 'raw', str(economist_output)),
-        "financial_analyst": getattr(financial_analyst, 'raw', str(financial_analyst)),
-        "financial_analyst_output": getattr(financial_analyst_output, 'raw', str(financial_analyst_output))
+        "financial_analyst_output": getattr(financial_analyst_output, 'raw', str(financial_analyst_output)),
     }
     return policy_wonks_output
 
@@ -69,6 +65,7 @@ async def run_crew(crew_request: PolicyWonksRequest) -> PolicyWonksResponse:
     - **economic_variable1**: First economic variable to consider in the analysis (e.g., inflation rate)
     - **economic_variable2**: Second economic variable to consider in the analysis (e.g., government spending)
     """
+
     try:
         policy_wonks_output = run(
             crew_request.policy_topic1,
@@ -77,12 +74,12 @@ async def run_crew(crew_request: PolicyWonksRequest) -> PolicyWonksResponse:
             crew_request.economic_variable2,
         )
         # Format the final answer from the Economist
-        final_answer_economist = "\n" + policy_wonks_output["economist"] + "\n" + policy_wonks_output["economist_output"] + "\n"
+        final_answer_economist = policy_wonks_output["economist_output"]
         final_answer_economist.strip("[End of Thought and Final Answer]" and "[End of Thought]" and "[Final Answer]" and "[My job depends on it!]")
         final_answer_economist.strip("I hope this analysis provides a comprehensive understanding of the current monetary policy's impact on the economy." and "If you have any further questions or need more information, please don't hesitate to ask.")
 
         # Format the final answer from the Financial Analyst
-        final_answer_financial_analyst = "\n" + policy_wonks_output["financial_analyst"] + "\n" + policy_wonks_output["financial_analyst_output"] + "\n"
+        final_answer_financial_analyst = policy_wonks_output["financial_analyst_output"]
         final_answer_financial_analyst.strip("[End of Thought and Final Answer]" and "[End of Thought]" and "[Final Answer]" and "[My job depends on it!]")
         final_answer_financial_analyst.strip("I hope this analysis provides a comprehensive understanding of the current monetary policy's impact on the economy." and "If you have any further questions or need more information, please don't hesitate to ask.")
 
