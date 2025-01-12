@@ -15,12 +15,12 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 # Initialize FastAPI
 api =  FastAPI(
-    title='Policy Wonks API',
+    title="Policy Wonks API",
     description="""
         API for Policy Wonks - an orchestrated, autonomous multi-agent system
         for analyzing economic and fiscal policy using the CrewAI framework.
     """,
-    version='0.1.0',
+    version="1.1.0",
 )
 
 # Entrypoint for the crew
@@ -29,17 +29,18 @@ def run(policy_topic1: str, policy_topic2: str, economic_variable1: str, economi
     Run the crew with provided inputs.
     """
     inputs = {
-        'policy_topic1': policy_topic1,
-        'policy_topic2': policy_topic2,
-        'economic_variable1': economic_variable1,
-        'economic_variable2': economic_variable2,
+        "policy_topic1": policy_topic1,
+        "policy_topic2": policy_topic2,
+        "economic_variable1": economic_variable1,
+        "economic_variable2": economic_variable2,
     }
     # Initialize the PolicyWonks crew
     policy_wonks = PolicyWonks()
+
     # Run the crew and assign the output to a variable
     crew_output = policy_wonks.crew().kickoff(inputs=inputs)
 
-     # Extract outputs from economist
+    # Extract outputs from economist
     economist_task = policy_wonks.economist_task()
     economist_output = economist_task.output # get the economist output
 
@@ -49,13 +50,13 @@ def run(policy_topic1: str, policy_topic2: str, economic_variable1: str, economi
 
     # Return the outputs
     policy_wonks_output = {
-        "economist_output": getattr(economist_output, 'raw', str(economist_output)),
-        "financial_analyst_output": getattr(financial_analyst_output, 'raw', str(financial_analyst_output)),
+        "economist_output": getattr(economist_output, "raw", str(economist_output)),
+        "financial_analyst_output": getattr(financial_analyst_output, "raw", str(financial_analyst_output)),
     }
     return policy_wonks_output
 
 # Define the API routes
-@api.post(path='/run_crew', response_model=PolicyWonksResponse)
+@api.post(path="/run_crew", response_model=PolicyWonksResponse)
 async def run_crew(crew_request: PolicyWonksRequest) -> PolicyWonksResponse:
     """
     Run the crew with provided input
@@ -88,14 +89,19 @@ async def run_crew(crew_request: PolicyWonksRequest) -> PolicyWonksResponse:
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# Define the root route / health-check endpoint
+# Define the root endpoint
 @api.get(path='/')
-def root():
+async def root():
     return {
-        'message': 'Welcome to the PolicyWonks API!',
-        'description': 'An orchestrated, autonomous multi-agent system for analyzing economic and fiscal policy using the CrewAI framework.'
+        "message": "Welcome to the PolicyWonks API!",
+        "description": "An orchestrated, autonomous multi-agent system for analyzing economic and fiscal policy using the CrewAI framework."
     }
 
+# Define the health-check endpoint
+@api.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
 # Entrypoint for the Policy Wonks API
-if __name__ == '__main__':
-    uvicorn.run(api, host='127.0.0.1', port=10000, reload=True)
+if __name__ == "__main__":
+    uvicorn.run(api, host="127.0.0.1", port=8000, reload=True)
