@@ -1,7 +1,25 @@
-from crewai import Agent, Crew, Process, Task
+import os
+from dotenv import load_dotenv
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
+from crewai_tools import SerperDevTool
+from crewai.tasks.task_output import TaskOutput
 
+load_dotenv()
 
+search_internet = SerperDevTool()
+
+llama_instruct_model = LLM(
+	model='openai/Llama-3.3-70B-Instruct',
+	api_key=os.getenv("GITHUB_API_KEY"),
+	base_url='https://models.inference.ai.azure.com',
+)
+
+gpt_4o_mini_model = LLM(
+	model='gpt-4o-mini',
+	api_key=os.getenv("GITHUB_API_KEY"),
+	base_url='https://models.inference.ai.azure.com',
+)
 @CrewBase
 class PolicyWonks():
 	"""PolicyWonks crew"""
