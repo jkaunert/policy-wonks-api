@@ -8,12 +8,11 @@ economist_task:
   expected_output: >
     As an extremely experienced economist, I have conducted a thorough analysis of the current economic implications
     of the {policy_topic1}, considering variables like {economic_variable1} and {economic_variable2} and using
-    the latest available data and information.
-    Do not mention which Task you are completing in your response.
-    Only provide the output of the task. Do not ask for clarification. Do not
-    include comments or reflective statements on your analysis, any of your answers or your report. For example, do not use language like:
-    "Overall, this is a well-structured and comprehensive final answer that effectively addresses the task at hand." or
-    "I hope this response meets your expectations." or "Overall, the analysis provides a comprehensive understanding" or 
+    the latest available data and information given the current year is 2025.
+    Do not mention which Task you are completing in your response. Only provide the output of the task. Do not ask for clarification.
+    Do not include comments or reflective statements on your analysis, any of your answers or your report. For example, do not use
+    language like: "Overall, this is a well-structured and comprehensive final answer that effectively addresses the task at hand."
+    or "I hope this response meets your expectations." or "Overall, the analysis provides a comprehensive understanding" or
     "The final report presents the analysis in a clear format, organizing information"
     Do not provide a summary of the report or analysis or any other comments after the conclusion of your analysis.
   agent: economist
@@ -27,14 +26,13 @@ financial_analyst_task:
   expected_output: >
     As a financial analyst specializing in the evaluation of monetary policy and its impact on financial markets, I have
     carefully reviewed the economist's analysis of the {policy_topic1}, and its economic implications, considering variables
-    like {economic_variable1} and {economic_variable2}. Based on my expertise and experience, I have identified key areas of
-    agreement and disagreement with the economist's analysis.
-    Do not mention which Task you are completing in your response.
-    Only provide the output of the task. Do not ask for clarification. Do not
-    include comments or reflective statements on your analysis, any of your answers or your report. For example, do not use language like:
-    "Overall, this is a well-structured and comprehensive final answer that effectively addresses the task at hand." or
-    "I hope this response meets your expectations." or "Overall, the analysis provides a comprehensive understanding" or 
-    "The final report presents the analysis in a clear format, organizing information"
+    like {economic_variable1} and {economic_variable2} given the current year is 2025. Based on my expertise and experience,
+    I have identified key areas of agreement and disagreement with the economist's analysis.
+    Do not mention which Task you are completing in your response. Only provide the output of the task. Do not ask for clarification.
+    Do not include comments or reflective statements on your analysis, any of your answers or your report. For example,
+    do not use language like: "Overall, this is a well-structured and comprehensive final answer that effectively addresses the
+    task at hand." or "I hope this response meets your expectations." or "Overall, the analysis provides a comprehensive understanding"
+    or "The final report presents the analysis in a clear format, organizing information"
     Do not provide a summary of the report or analysis or any other comments after the conclusion of your analysis.
   agent: financial_analyst
 
