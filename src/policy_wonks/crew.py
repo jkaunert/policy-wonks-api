@@ -1,26 +1,33 @@
 import os
-from tabnanny import verbose
 from dotenv import load_dotenv
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import SerperDevTool
-from regex import F
+from crewai_tools import SerperDevTool, RagTool
 
 load_dotenv()
 
+# tools
 search_internet = SerperDevTool()
 
+# llms
+jamba_1_5_mini_model = LLM(
+	model='openai/AI21-Jamba-1.5-Mini',
+	api_key=os.getenv("GITHUB_API_KEY"),
+	base_url='https://models.inference.ai.azure.com',
+)
+
 llama_instruct_model = LLM(
-	model='openai/Llama-3.3-70B-Instruct',
+	model='openai/Meta-Llama-3-70B-Instruct',
 	api_key=os.getenv("GITHUB_API_KEY"),
 	base_url='https://models.inference.ai.azure.com',
 )
 
 gpt_4o_mini_model = LLM(
-	model='gpt-4o-mini',
+	model='openai/gpt-4o-mini',
 	api_key=os.getenv("GITHUB_API_KEY"),
 	base_url='https://models.inference.ai.azure.com',
 )
+
 @CrewBase
 class PolicyWonks():
 	"""PolicyWonks crew"""
@@ -34,7 +41,8 @@ class PolicyWonks():
 			allow_delegation=False,
 			config=self.agents_config["economist"],
 			llm=llama_instruct_model,
-			tools=[search_internet],
+			memory=True,
+			tools=[search_internet, RagTool()],
 			verbose=True,
 		)
 
@@ -44,7 +52,8 @@ class PolicyWonks():
 			allow_delegation=False,
 			config=self.agents_config['financial_analyst'],
 			llm=llama_instruct_model,
-			tools=[search_internet],
+			memory=True,
+			tools=[search_internet, RagTool()],
 			verbose=True,
 		)
 
@@ -52,7 +61,6 @@ class PolicyWonks():
 	def economist_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['economist_task'],
-			llm=gpt_4o_mini_model,
 			verbose=True,
 		)
 
@@ -63,7 +71,6 @@ class PolicyWonks():
 			context=[
 				self.tasks_config['economist_task'],
 				],
-			llm=gpt_4o_mini_model,
 			verbose=True,
 		)
 
@@ -74,9 +81,10 @@ class PolicyWonks():
 		return Crew(
 			agents=self.agents,
 			tasks=self.tasks,
-			memory=True,
 			planning=True,
-			planning_llm=gpt_4o_mini_model,
+			memory=True,
+			planning_llm=llama_instruct_model,
+			function_calling_llm=gpt_4o_mini_model,
 			process=Process.sequential,
 			verbose=True,
 		)
