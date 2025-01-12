@@ -1,8 +1,10 @@
 import os
+from tabnanny import verbose
 from dotenv import load_dotenv
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
+from regex import F
 
 load_dotenv()
 
@@ -30,7 +32,7 @@ class PolicyWonks():
 	def economist(self) -> Agent:
 		return Agent(
 			allow_delegation=False,
-			config=self.agents_config['economist'],
+			config=self.agents_config["economist"],
 			llm=llama_instruct_model,
 			tools=[search_internet],
 			verbose=True,
@@ -50,13 +52,19 @@ class PolicyWonks():
 	def economist_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['economist_task'],
+			llm=gpt_4o_mini_model,
+			verbose=True,
 		)
 
 	@task
 	def financial_analyst_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['financial_analyst_task'],
-			context=[self.tasks_config['economist_task'],]
+			context=[
+				self.tasks_config['economist_task'],
+				],
+			llm=gpt_4o_mini_model,
+			verbose=True,
 		)
 
 	@crew

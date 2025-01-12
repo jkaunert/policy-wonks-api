@@ -78,9 +78,13 @@ async def run_crew(crew_request: PolicyWonksRequest) -> PolicyWonksResponse:
         )
         # Format the final answer from the Economist
         final_answer_economist = "\n" + policy_wonks_output["economist"] + "\n" + policy_wonks_output["economist_output"] + "\n"
+        final_answer_economist.strip("[End of Thought and Final Answer]" and "[End of Thought]" and "[Final Answer]" and "[My job depends on it!]")
+        final_answer_economist.strip("I hope this analysis provides a comprehensive understanding of the current monetary policy's impact on the economy." and "If you have any further questions or need more information, please don't hesitate to ask.")
 
         # Format the final answer from the Financial Analyst
         final_answer_financial_analyst = "\n" + policy_wonks_output["financial_analyst"] + "\n" + policy_wonks_output["financial_analyst_output"] + "\n"
+        final_answer_financial_analyst.strip("[End of Thought and Final Answer]" and "[End of Thought]" and "[Final Answer]" and "[My job depends on it!]")
+        final_answer_financial_analyst.strip("I hope this analysis provides a comprehensive understanding of the current monetary policy's impact on the economy." and "If you have any further questions or need more information, please don't hesitate to ask.")
 
         # Return the final answers as a PolicyWonksResponse object
         return PolicyWonksResponse(economist_response=final_answer_economist, financial_analyst_response=final_answer_financial_analyst)
