@@ -1,78 +1,71 @@
-import os
-from dotenv import load_dotenv
-from crewai import Agent, Crew, Process, Task, LLM
-from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import SerperDevTool, RagTool
-
-load_dotenv()
-
-# tools
-search_internet = SerperDevTool()
-rag_tool = RagTool()
-
-# llms
-jamba_1_5_mini_model = LLM(
-	model='openai/AI21-Jamba-1.5-Mini',
-	api_key=os.getenv("GITHUB_API_KEY"),
-	base_url='https://models.inference.ai.azure.com',
+from crewai import (
+	Agent,
+	Crew,
+	Process,
+	Task,
 )
-
-llama_instruct_model = LLM(
-	model='openai/Meta-Llama-3-70B-Instruct',
-	api_key=os.getenv("GITHUB_API_KEY"),
-	base_url='https://models.inference.ai.azure.com',
+from crewai.project import (
+	CrewBase,
+	agent,
+	crew,
+	task,
 )
-
-gpt_4o_mini_model = LLM(
-	model='openai/gpt-4o-mini',
-	api_key=os.getenv("GITHUB_API_KEY"),
-	base_url='https://models.inference.ai.azure.com',
+from crewai_tools import (
+	SerperDevTool,
+	WebsiteSearchTool,
+)
+from policy_wonks.llm_config import (
+	jamba_1_5_mini_model,
+	jamba_1_5_large_model,
+	llama_instruct_model,
+	gpt_4o_mini_model,
+	gpt_4o_model,
 )
 
 @CrewBase
 class PolicyWonks():
 	"""PolicyWonks crew"""
 
-	agents_config = 'config/agents.yaml'
-	tasks_config = 'config/tasks.yaml'
+	agents_config = "config/agents.yaml"
+	tasks_config = "config/tasks.yaml"
 
 	@agent
 	def economist(self) -> Agent:
 		return Agent(
-			allow_delegation=False,
 			config=self.agents_config["economist"],
-			llm=llama_instruct_model,
-			memory=True,
-			tools=[search_internet, RagTool()],
+			llm=gpt_4o_mini_model,
+			tools=[
+				SerperDevTool(),
+				WebsiteSearchTool(),
+			],
 			verbose=True,
 		)
 
 	@agent
 	def financial_analyst(self) -> Agent:
 		return Agent(
-			allow_delegation=False,
-			config=self.agents_config['financial_analyst'],
-			llm=llama_instruct_model,
-			memory=True,
-			tools=[search_internet, RagTool()],
+			config=self.agents_config["financial_analyst"],
+			llm=gpt_4o_mini_model,
+			tools=[
+				SerperDevTool(),
+				WebsiteSearchTool(),
+			],
 			verbose=True,
 		)
 
 	@task
 	def economist_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['economist_task'],
-			verbose=True,
+			config=self.tasks_config["economist_task"],
 		)
 
 	@task
 	def financial_analyst_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['financial_analyst_task'],
+			config=self.tasks_config["financial_analyst_task"],
 			context=[
-				self.tasks_config['economist_task'],
+				self.tasks_config["economist_task"],
 				],
-			verbose=True,
 		)
 
 	@crew
@@ -81,11 +74,11 @@ class PolicyWonks():
 
 		return Crew(
 			agents=self.agents,
-			tasks=self.tasks,
-			planning=True,
+			function_calling_llm=jamba_1_5_mini_model,
 			memory=True,
-			planning_llm=gpt_4o_mini_model,
-			function_calling_llm=gpt_4o_mini_model,
+			planning=True,
+			planning_llm=llama_instruct_model,
 			process=Process.sequential,
+			tasks=self.tasks,
 			verbose=True,
 		)
