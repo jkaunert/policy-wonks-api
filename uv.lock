@@ -2835,7 +2835,7 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "crewai", extras = ["tools"], specifier = ">=0.86.0,<1.0.0" }]
+requires-dist = [{ name = "crewai", extras = ["tools"], specifier = ">=0.95.0" }]
 
 [[package]]
 name = "portalocker"
