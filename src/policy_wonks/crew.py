@@ -35,8 +35,8 @@ class PolicyWonks():
 			config=self.agents_config["economist"],
 			llm=gpt_4o_mini_model,
 			tools=[
-				SerperDevTool(),
 				WebsiteSearchTool(),
+				SerperDevTool(),
 			],
 			verbose=True,
 		)
@@ -47,8 +47,8 @@ class PolicyWonks():
 			config=self.agents_config["financial_analyst"],
 			llm=gpt_4o_mini_model,
 			tools=[
-				SerperDevTool(),
 				WebsiteSearchTool(),
+				SerperDevTool(),
 			],
 			verbose=True,
 		)
