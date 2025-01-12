@@ -8,6 +8,7 @@ load_dotenv()
 
 # tools
 search_internet = SerperDevTool()
+rag_tool = RagTool()
 
 # llms
 jamba_1_5_mini_model = LLM(
@@ -42,7 +43,7 @@ class PolicyWonks():
 			config=self.agents_config["economist"],
 			llm=llama_instruct_model,
 			memory=True,
-			tools=[search_internet, RagTool()],
+			tools=[search_internet, rag_tool],
 			verbose=True,
 		)
 
@@ -53,7 +54,7 @@ class PolicyWonks():
 			config=self.agents_config['financial_analyst'],
 			llm=llama_instruct_model,
 			memory=True,
-			tools=[search_internet, RagTool()],
+			tools=[search_internet, rag_tool],
 			verbose=True,
 		)
 
@@ -62,12 +63,16 @@ class PolicyWonks():
 		return Task(
 			config=self.tasks_config['economist_task'],
 			verbose=True,
+			llm=gpt_4o_mini_model
+			tools=[search_internet, rag_tool],
 		)
 
 	@task
 	def financial_analyst_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['financial_analyst_task'],
+			llm=gpt_4o_mini_model,
+			tools=[search_internet, rag_tool],
 			context=[
 				self.tasks_config['economist_task'],
 				],
@@ -83,7 +88,7 @@ class PolicyWonks():
 			tasks=self.tasks,
 			planning=True,
 			memory=True,
-			planning_llm=llama_instruct_model,
+			planning_llm=gpt_4o_mini_model,
 			function_calling_llm=gpt_4o_mini_model,
 			process=Process.sequential,
 			verbose=True,
