@@ -1,6 +1,3 @@
-import os, sys, uvicorn, warnings
-from crewai import Task
-from crewai.tasks.task_output import TaskOutput
 from fastapi import (
     FastAPI,
     HTTPException,
@@ -10,11 +7,13 @@ from policy_wonks.models import (
     PolicyWonksRequest,
     PolicyWonksResponse,
 )
+import uvicorn, warnings
 
+# Suppress warnings
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 # Initialize FastAPI
-api =  FastAPI(
+api = FastAPI(
     title="Policy Wonks API",
     description="""
         API for Policy Wonks - an orchestrated, autonomous multi-agent system
