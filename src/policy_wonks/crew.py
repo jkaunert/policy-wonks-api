@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
-from crewai.tasks.task_output import TaskOutput
 
 load_dotenv()
 
@@ -28,29 +27,36 @@ class PolicyWonks():
 	tasks_config = 'config/tasks.yaml'
 
 	@agent
-	def researcher(self) -> Agent:
+	def economist(self) -> Agent:
 		return Agent(
-			config=self.agents_config[''],
-			verbose=True
+			allow_delegation=False,
+			config=self.agents_config['economist'],
+			llm=llama_instruct_model,
+			tools=[search_internet],
+			verbose=True,
 		)
 
 	@agent
-	def reporting_analyst(self) -> Agent:
+	def financial_analyst(self) -> Agent:
 		return Agent(
-			config=self.agents_config[''],
-			verbose=True
+			allow_delegation=False,
+			config=self.agents_config['financial_analyst'],
+			llm=llama_instruct_model,
+			tools=[search_internet],
+			verbose=True,
 		)
 
 	@task
-	def research_task(self) -> Task:
+	def economist_task(self) -> Task:
 		return Task(
-			config=self.tasks_config[''],
+			config=self.tasks_config['economist_task'],
 		)
 
 	@task
-	def reporting_task(self) -> Task:
+	def financial_analyst_task(self) -> Task:
 		return Task(
-			config=self.tasks_config[''],
+			config=self.tasks_config['financial_analyst_task'],
+			context=[self.tasks_config['economist_task'],]
 		)
 
 	@crew
@@ -58,8 +64,11 @@ class PolicyWonks():
 		"""Creates the PolicyWonks crew"""
 
 		return Crew(
-			agents=self.agents, # Automatically created by the @agent decorator
-			tasks=self.tasks, # Automatically created by the @task decorator
+			agents=self.agents,
+			tasks=self.tasks,
+			memory=True,
+			planning=True,
+			planning_llm=gpt_4o_mini_model,
 			process=Process.sequential,
 			verbose=True,
 		)
