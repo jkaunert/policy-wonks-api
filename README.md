@@ -296,7 +296,7 @@ Run policy-wonks-api using the following command:
 <details closed>
 <summary>Contributor Graph</summary>
 <br>
-[![](https://contrib.rocks/image?repo=jkaunert/policy-wonks-api)](https://github.com/jkaunert/policy-wonks-api/graphs/contributors)
+![](https://contrib.rocks/image?repo=jkaunert/policy-wonks-api)
 </details>
 
 ---
