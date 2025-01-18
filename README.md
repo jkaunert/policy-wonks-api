@@ -193,7 +193,8 @@ The policy-wonks-api project addresses the challenge of analyzing economic and f
 
 Before getting started with policy-wonks-api, ensure your runtime environment meets the following requirements:
 
-- **Programming Language:** Python
+- **Programming Language:** Python 3.12
+- **Dependency Management:** UV
 - **Container Runtime:** Docker
 
 ### Installation
@@ -216,15 +217,19 @@ Install policy-wonks-api using one of the following methods:
 
 3. Install the project dependencies:
 
+```sh
+❯ uv sync
+```
+
 **Using `docker`** &nbsp; [<img align="center" src="https://img.shields.io/badge/Docker-2CA5E0.svg?style={badge_style}&logo=docker&logoColor=white" />](https://www.docker.com/)
 
 ```sh
 ❯ DOCKER_BUILDKIT=1 docker build -t {image_name} .
 ```
 
-**Docker Hub** &nbsp; [<img align="center" src="https://img.shields.io/badge/Docker-2CA5E0.svg?style={badge_style}&logo=docker&logoColor=white" />](https://www.docker.com/)
+**From Docker Hub** &nbsp; [<img align="center" src="https://img.shields.io/badge/Docker-2CA5E0.svg?style={badge_style}&logo=docker&logoColor=white" />](https://www.docker.com/)
 ```sh
-❯ docker pull jkaunert/policy-wonks-api-v1:latest
+❯ docker pull jkaunert/policy-wonks-api-v1:local
 ```
 
 ### Usage
@@ -233,12 +238,12 @@ Run policy-wonks-api using the following command:
 **Using `docker` locally** &nbsp; [<img align="center" src="https://img.shields.io/badge/Docker-2CA5E0.svg?style={badge_style}&logo=docker&logoColor=white" />](https://www.docker.com/)
 
 ```sh
-❯ docker run -p 8000:8000 {image_name}
+❯ docker run -p 8000:8000 policy-wonks-api-v1:local
 ```
 
 **Render Deployment** &nbsp; [<img align="center" src="https://img.shields.io/badge/Render-008CBA.svg?style={badge_style}&logo=render&logoColor=white" />](https://render.com/)
 
-[Policy Wonks API](https://policy-wonks-api-v1-latest.onrender.com)
+[Policy Wonks API](https://policy-wonks-api-v1-latest.onrender.com/docs)
 
 ## Project Roadmap
 
@@ -298,7 +303,7 @@ Run policy-wonks-api using the following command:
 
 ## License
 
-This project is protected under the GNU General Public License v3.0 - For more details, refer to the [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/) page.
+This project is protected under the GNU General Public License v3.0 - For more details, refer to the [LICENSE](https://choosealicense.com/licenses/gpl-3.0/) page.
 
 ---
 
