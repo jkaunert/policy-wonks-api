@@ -16,10 +16,10 @@ from crewai_tools import (
 )
 from policy_wonks.llm_config import (
 	jamba_1_5_mini_model,
-	jamba_1_5_large_model,
-	llama_instruct_model,
 	gpt_4o_mini_model,
 	gpt_4o_model,
+	hf_qwq_model,
+	together_ai_llama3_3,
 )
 
 @CrewBase
@@ -33,7 +33,7 @@ class PolicyWonks():
 	def economist(self) -> Agent:
 		return Agent(
 			config=self.agents_config["economist"],
-			llm=gpt_4o_mini_model,
+			llm=together_ai_llama3_3,
 			tools=[
 				WebsiteSearchTool(),
 				SerperDevTool(),
@@ -45,7 +45,7 @@ class PolicyWonks():
 	def financial_analyst(self) -> Agent:
 		return Agent(
 			config=self.agents_config["financial_analyst"],
-			llm=gpt_4o_mini_model,
+			llm=together_ai_llama3_3,
 			tools=[
 				WebsiteSearchTool(),
 				SerperDevTool(),
@@ -74,10 +74,10 @@ class PolicyWonks():
 
 		return Crew(
 			agents=self.agents,
-			function_calling_llm=jamba_1_5_mini_model,
+			function_calling_llm=hf_qwq_model,
 			memory=True,
 			planning=True,
-			planning_llm=llama_instruct_model,
+			planning_llm=hf_qwq_model,
 			process=Process.sequential,
 			tasks=self.tasks,
 			verbose=True,
