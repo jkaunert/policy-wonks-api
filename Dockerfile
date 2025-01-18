@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.12-slim
+FROM python:3.12-slim
 
 # install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -17,4 +17,4 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN uv sync --frozen --no-cache
 
 # run the app
-CMD ["/app/.venv/bin/uvicorn", "policy_wonks.app:api", "--host", "0.0.0.0", "--port", "10000"]
+CMD ["/app/.venv/bin/uvicorn", "policy_wonks.app:api", "--host", "0.0.0.0", "--port", "8000"]
